@@ -1,0 +1,111 @@
+/* Set navigation styles */
+nav {
+  background-color: #333;
+}
+
+/* Set navigation list styles */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+/* Set navigation item styles */
+nav li {
+  margin-right: 20px;
+}
+
+/* Set navigation link styles */
+nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Set active navigation link styles */
+nav a:hover,
+nav a:focus {
+  color: #f00;
+}
+
+#product-listing,
+#order-tracking,
+#supplier-management {
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* productlisting.js */
+
+/* Example CSS for product listing */
+#product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.product-item {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  text-align: center;
+}
+
+.product-item img {
+  max-width: 100%;
+  height: auto;
+}
+
+.product-item h2 {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.product-item p {
+  margin-bottom: 0.5rem;
+}
+
+/* order styles */
+/* Sample CSS styles for the order management section */
+
+.order-management {
+  padding: 20px;
+}
+
+.order-management h2 {
+  margin-bottom: 10px;
+}
+
+.order-management table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-management table th,
+.order-management table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-management table th {
+  text-align: left;
+  font-weight: bold;
+}
+
+.order-management table td {
+  text-align: left;
+}
+
+.order-management form {
+  margin-top: 20px;
+}
+
+.order-management form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.order-management form input,
+.order-management form button {
+  margin-bottom: 10px;
+}
