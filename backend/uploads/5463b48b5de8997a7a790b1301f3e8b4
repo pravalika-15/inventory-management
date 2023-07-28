@@ -1,0 +1,6 @@
+name,contactName,phoneNumber,amount,email,address,paymentStatus
+Supplier1,John Doe,1234567890,2000,supplier1@example.com,123 Main St,Payment Complete
+Supplier2,Jane Smith,9876543210,1500,supplier2@example.com,456 Oak Ave,Payment Pending!
+Supplier3,Bob Johnson,5555555555,1800,supplier3@example.com,789 Elm Rd,Payment Complete
+Supplier4,Alice Williams,1112223334,2300,supplier4@example.com,321 Pine Ln,Payment Pending!
+Supplier5,Michael Brown,9998887776,1700,supplier5@example.com,654 Maple Blvd,Payment Complete

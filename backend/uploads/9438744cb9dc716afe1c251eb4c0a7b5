@@ -1,0 +1,10 @@
+name,price,description,category,quantity,supplier
+Laptop,800,"High-performance laptop for gaming and work.",Electronics,10,64bed995d629595730f7fe35
+Smartphone,500,"Feature-rich smartphone with a powerful camera.",Electronics,15,64bed995d629595730f7fe35
+Headphones,100,"Comfortable over-ear headphones with noise cancellation.",Electronics,20,64bed995d629595730f7fe35
+Backpack,50,"Durable and spacious backpack for daily use.",Fashion,30,64bed995d629595730f7fe35
+T-shirt,20,"Premium quality cotton t-shirt.",Fashion,50,64bd33f2f77302131d2c59a2
+Shoes,60,"Stylish and comfortable sneakers for all-day wear.",Fashion,25,64bd33f2f77302131d2c59a2
+Book,15,"Best-selling novel by a renowned author.",Books,40,64bd33f2f77302131d2c59a2
+Keyboard,40,"Wired keyboard with ergonomic design.",Electronics,12,64bd33f2f77302131d2c59a2
+Mouse,20,"Wireless mouse with precise tracking.",Electronics,18,64bd33f2f77302131d2c59a2

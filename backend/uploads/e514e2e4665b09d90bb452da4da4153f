@@ -1,0 +1,30 @@
+name,price,description,category,quantity,supplier
+kurkure,40,snacks,snacks,50,64a7d9452d4669dddb0c6a78
+lays,30,bwhbxwh,food,40,64bed9c5d629595730f7fe3b
+kitkat,20,qwertyui,chocolate,30,64bed9c5d629595730f7fe3b
+dairy milk oreo,180,bwjbcwhj,chocolate,45,64bed9c5d629595730f7fe3b
+lays classic,35,delicious,food,30,64bed9c5d629595730f7fe3b
+doritos,50,chips,snacks,25,64bed9c5d629595730f7fe3b
+oreo,25,cookies,food,60,64bed9c5d629595730f7fe3b
+dark chocolate,100,rich and delicious,chocolate,20,64bed9c5d629595730f7fe3b
+munch,10,crispy wafer,chocolate,70,64bed9c5d629595730f7fe3b
+lays spicy,35,spicy flavor,snacks,40,64bed9c5d629595730f7fe3b
+mango juice,70,natural mango flavor,beverage,15,64beda19d629595730f7fe41
+pineapple juice,80,refreshing pineapple,beverage,25,64beda19d629595730f7fe41
+mixed fruit juice,90,blend of fruits,beverage,20,64beda19d629595730f7fe41
+apple juice,60,sweet apple,beverage,30,64beda19d629595730f7fe41
+grape juice,75,refreshing grape,beverage,35,64beda19d629595730f7fe41
+orange juice,65,natural orange,beverage,28,64beda19d629595730f7fe41
+kiwi juice,85,exotic kiwi,beverage,22,64beda19d629595730f7fe41
+guava juice,75,sweet guava,beverage,33,64beda19d629595730f7fe41
+strawberry juice,90,fresh strawberry,beverage,40,64beda19d629595730f7fe41
+banana juice,50,natural banana,beverage,18,64beda19d629595730f7fe41
+milk,25,fresh cow milk,dairy,55,64bed995d629595730f7fe35
+butter,40,creamy butter,dairy,30,64bed995d629595730f7fe35
+cheese,60,cheddar cheese,dairy,40,64bed995d629595730f7fe35
+yogurt,30,healthy yogurt,dairy,35,64bed995d629595730f7fe35
+cream,50,whipped cream,dairy,25,64bed995d629595730f7fe35
+paneer,70,fresh paneer,dairy,20,64bed995d629595730f7fe35
+ghee,80,pure ghee,dairy,15,64bed995d629595730f7fe35
+buttermilk,20,refreshing buttermilk,dairy,50,64bed995d629595730f7fe35
+ice cream,90,various flavors,dairy,28,64bed995d629595730f7fe35

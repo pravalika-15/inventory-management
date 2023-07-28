@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Supplier = require("./supplierModel");
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     type: Number,
-    required: true,
+    default: 1,
   },
   supplier: {
     type: mongoose.Schema.Types.ObjectId,

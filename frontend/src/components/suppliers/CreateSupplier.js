@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../../assets/css/supplier.css";
+import { useNavigate } from "react-router-dom";
 const SupplierCreateForm = () => {
   const [name, setName] = useState("");
   const [contactName, setContactName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
+  const [amount, setAmount] = useState("");
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const errors = {};
@@ -22,6 +26,9 @@ const SupplierCreateForm = () => {
 
     if (phoneNumber.trim() === "") {
       errors.phoneNumber = "Phone Number is required";
+    }
+    if (amount.trim() === "") {
+      errors.amount = "amount is required";
     }
 
     if (email.trim() === "") {
@@ -63,6 +70,9 @@ const SupplierCreateForm = () => {
       case "address":
         setAddress(value);
         break;
+      case "amount":
+        setAmount(value);
+        break;
       default:
         break;
     }
@@ -85,7 +95,10 @@ const SupplierCreateForm = () => {
         phoneNumber,
         email,
         address,
+        amount,
       });
+      // console.log(response);
+
       console.log("Supplier created:", response.data);
 
       // Reset form fields and errors
@@ -94,9 +107,18 @@ const SupplierCreateForm = () => {
       setPhoneNumber("");
       setEmail("");
       setAddress("");
+      setAmount("");
       setErrors({});
+      navigate("/suppliers");
     } catch (error) {
       console.error("Error creating supplier:", error);
+      if (error.response && error.response.data && error.response.data.error) {
+        // Set the server error message from the response data
+        setServerError(error.response.data.error);
+      } else {
+        // If there's no specific error message from the server, display a generic message
+        setServerError("Failed to create the supplier");
+      }
     }
   };
 
@@ -167,6 +189,24 @@ const SupplierCreateForm = () => {
               </p>
             )}
           </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="amount"
+            >
+              Amount Rupees:
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="amount"
+              type="number"
+              value={amount}
+              onChange={(event) => handleInputChange(event, "amount")}
+            />
+            {errors.amount && (
+              <p className="text-red-500 text-xs italic">{errors.amount}</p>
+            )}
+          </div>
 
           <div className="mb-4">
             <label
@@ -205,6 +245,9 @@ const SupplierCreateForm = () => {
               <p className="text-red-500 text-xs italic">{errors.address}</p>
             )}
           </div>
+          {serverError && (
+            <p className="text-red-500 text-xs italic">{serverError}</p>
+          )}
 
           <div className="flex items-center justify-between">
             <button
@@ -213,12 +256,6 @@ const SupplierCreateForm = () => {
             >
               Create Supplier
             </button>
-            {/* <a
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-            href="#"
-          >
-            Forgot Password?
-          </a> */}
           </div>
         </form>
       </div>

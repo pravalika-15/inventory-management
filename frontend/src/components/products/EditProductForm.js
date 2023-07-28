@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditProduct = () => {
   const { id } = useParams();
   const [productData, setProductData] = useState({
-    id: "",
     name: "",
-    category: "",
-    price: "",
+    price: 0,
     description: "",
+    category: "",
+    quantity: 0,
     supplier: "",
-    quantity: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch product data from the server using the provided ID
     const fetchProduct = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:3006/products/${id}`);
+        const response = await fetch(
+          `http://localhost:3006/api/products/${id}`
+        );
         if (response.ok) {
           const product = await response.json();
           setProductData(product);
         } else {
-          console.error("Failed to fetch product data");
+          setError("Failed to fetch product data");
         }
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        setError("Error fetching product data");
       }
+      setIsLoading(false);
     };
 
     fetchProduct();
@@ -40,7 +47,8 @@ const EditProduct = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:3006/products/${id}`, {
+      setIsLoading(true);
+      const response = await fetch(`http://localhost:3006/api/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -49,36 +57,39 @@ const EditProduct = () => {
       });
 
       if (response.ok) {
-        // Product update successful
-        console.log("Product updated successfully");
-        // Redirect to the product listing page or perform any other desired action
+        setSuccess(true);
+        navigate("/products");
       } else {
-        // Product update failed
-        console.error("Failed to update product");
+        const data = await response.json();
+        setFormError(data.error);
+        setError("Failed to update product");
       }
     } catch (error) {
-      console.error("Error updating product:", error);
+      setError("Error updating product");
+      setFormError(
+        "Failed to create product, product with same name already exits!"
+      );
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
+
+  // if (success) {
+  //   return <div>Product updated successfully!</div>;
+  // }
 
   return (
     <div className="container mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
+      {formError && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="id" className="block text-sm font-medium">
-            ID:
-          </label>
-          <input
-            type="text"
-            id="id"
-            name="id"
-            value={productData.id}
-            onChange={handleChange}
-            className="mt-1 px-2 py-1 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
-            required
-          />
-        </div>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium">
             Name:
@@ -93,7 +104,63 @@ const EditProduct = () => {
             required
           />
         </div>
-        {/* Repeat the above pattern for other product fields */}
+        <div className="mb-4">
+          <label htmlFor="price" className="block text-sm font-medium">
+            Price:
+          </label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={productData.price}
+            onChange={handleChange}
+            className="mt-1 px-2 py-1 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-sm font-medium">
+            Description:
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={productData.description}
+            onChange={handleChange}
+            rows={4}
+            className="mt-1 px-2 py-1 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-sm font-medium">
+            Category:
+          </label>
+          <input
+            type="text"
+            id="category"
+            name="category"
+            value={productData.category}
+            onChange={handleChange}
+            className="mt-1 px-2 py-1 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="quantity" className="block text-sm font-medium">
+            Quantity:
+          </label>
+          <input
+            type="number"
+            id="quantity"
+            name="quantity"
+            value={productData.quantity}
+            onChange={handleChange}
+            className="mt-1 px-2 py-1 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+            required
+          />
+        </div>
+
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

@@ -1,18 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateProduct = () => {
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [supplier, setSupplier] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newProduct = {
-      id,
       name,
       category,
       price,
@@ -23,7 +24,7 @@ const CreateProduct = () => {
     console.log(newProduct);
 
     try {
-      const response = await fetch("http://localhost:3006/products", {
+      const response = await fetch("http://localhost:3006/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,18 +35,24 @@ const CreateProduct = () => {
       if (response.ok) {
         // Product creation successful
         console.log("Product created successfully");
+        navigate("/products");
+
         // Redirect to the product listing page or perform any other desired action
       } else {
         // Product creation failed
+        const data = await response.json(); 
+        setError(data.error);
         console.error("Failed to create product");
       }
     } catch (error) {
       console.error("Error creating product:", error);
+      setError("Failed to create product"); 
     }
   };
   return (
     <div className="container mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Create Product</h2>
+      {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium">

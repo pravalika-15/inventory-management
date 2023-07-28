@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Register({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -7,7 +7,9 @@ function Register({ onLogin }) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const [userExists, setUserExists] = useState(false);
 
   const handleUsernameChange = (e) => {
@@ -46,6 +48,7 @@ function Register({ onLogin }) {
       if (response.ok) {
         // Registration successful
         setError("");
+        setServerError("");
         const data = await response.json();
         const token = data.token;
 
@@ -53,16 +56,23 @@ function Register({ onLogin }) {
         localStorage.setItem("token", token);
         onLogin(token);
         console.log("Registration successful");
-        navigate("/products");
+        if (location.state && location.state.from) {
+          navigate(location.state.from);
+        } else {
+          // If no previous location, navigate to "/products"
+          navigate("/products");
+        }
       } else {
         const errorData = await response.json();
         if (response.status === 400 && errorData.userExists) {
           // User already exists
           setUserExists(true);
           setError("");
+          setServerError(errorData.error || "Failed to register user");
         } else {
           // Registration failed
-          setError(errorData.error);
+          setError(errorData.error || "Failed to register user");
+          setServerError("");
           setUserExists(false);
         }
       }
@@ -81,7 +91,7 @@ function Register({ onLogin }) {
         {userExists ? (
           <>
             <p>User already exists. Please login instead.</p>
-            <Link to="/login">
+            <Link to={{ pathname: "/login", state: { from: window.location.pathname } }}>
               <button>Login</button>
             </Link>
           </>
@@ -115,7 +125,7 @@ function Register({ onLogin }) {
           </form>
         )}
         <div className="mt-2">
-          <Link to="/login">Login</Link>
+          <Link  to={{ pathname: "/login", state: { from: window.location.pathname } }}>Login</Link>
         </div>
       </div> */}
       <div className="gradient-form  h-screen flex items-center justify-center bg-neutral-200 dark:bg-neutral-700">
@@ -139,114 +149,127 @@ function Register({ onLogin }) {
                         </h4>
                       </div>
                       {error && <p>{error}</p>}
+                      {serverError && (
+                        <div className="mb-2 text-red-500">{serverError}</div>
+                      )}
                       <form onSubmit={handleSubmit}>
-                        {userExists ? (
+                        {/* {userExists ? (
                           <>
                             <p>User already exists. Please login instead.</p>
-                            <Link to="/login">
+                            <Link
+                              to={{
+                                pathname: "/login",
+                                state: { from: window.location.pathname },
+                              }}
+                            >
                               <button>Login</button>
                             </Link>
                           </>
-                        ) : (
-                          <>
-                            <div
-                              className="relative mb-4"
-                              data-te-input-wrapper-init
+                        ) : ( */}
+                        <>
+                          <div
+                            className="relative mb-4"
+                            data-te-input-wrapper-init
+                          >
+                            <input
+                              type="text"
+                              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                              id="exampleFormControlInput1"
+                              placeholder="Username"
+                              value={username}
+                              onChange={handleUsernameChange}
+                            />
+                            <label
+                              htmlFor="exampleFormControlInput1"
+                              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                             >
-                              <input
-                                type="text"
-                                className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                id="exampleFormControlInput1"
-                                placeholder="Username"
-                                value={username}
-                                onChange={handleUsernameChange}
-                              />
-                              <label
-                                htmlFor="exampleFormControlInput1"
-                                className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-                              >
-                                Username
-                              </label>
-                            </div>
+                              Username
+                            </label>
+                          </div>
 
-                            <div
-                              className="relative mb-4"
-                              data-te-input-wrapper-init
+                          <div
+                            className="relative mb-4"
+                            data-te-input-wrapper-init
+                          >
+                            <input
+                              type="password"
+                              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                              id="exampleFormControlInput11"
+                              placeholder="Password"
+                              value={password}
+                              onChange={handlePasswordChange}
+                            />
+                            <label
+                              htmlFor="exampleFormControlInput11"
+                              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                             >
-                              <input
-                                type="password"
-                                className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                id="exampleFormControlInput11"
-                                placeholder="Password"
-                                value={password}
-                                onChange={handlePasswordChange}
-                              />
-                              <label
-                                htmlFor="exampleFormControlInput11"
-                                className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-                              >
-                                Password
-                              </label>
-                            </div>
+                              Password
+                            </label>
+                          </div>
 
-                            <div
-                              className="relative mb-4"
-                              data-te-input-wrapper-init
+                          <div
+                            className="relative mb-4"
+                            data-te-input-wrapper-init
+                          >
+                            <input
+                              type="text"
+                              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                              id="exampleFormControlInput12"
+                              placeholder="Phone"
+                              value={phone}
+                              onChange={handlePhoneChange}
+                            />
+                            <label
+                              htmlFor="exampleFormControlInput12"
+                              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                             >
-                              <input
-                                type="text"
-                                className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                id="exampleFormControlInput12"
-                                placeholder="Phone"
-                                value={phone}
-                                onChange={handlePhoneChange}
-                              />
-                              <label
-                                htmlFor="exampleFormControlInput12"
-                                className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-                              >
-                                Phone
-                              </label>
-                            </div>
+                              Phone
+                            </label>
+                          </div>
 
-                            <div
-                              className="relative mb-4"
-                              data-te-input-wrapper-init
+                          <div
+                            className="relative mb-4"
+                            data-te-input-wrapper-init
+                          >
+                            <input
+                              type="email"
+                              className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                              id="exampleFormControlInput13"
+                              placeholder="Email"
+                              value={email}
+                              onChange={handleEmailChange}
+                            />
+                            <label
+                              htmlFor="exampleFormControlInput13"
+                              className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
                             >
-                              <input
-                                type="email"
-                                className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-                                id="exampleFormControlInput13"
-                                placeholder="Email"
-                                value={email}
-                                onChange={handleEmailChange}
-                              />
-                              <label
-                                htmlFor="exampleFormControlInput13"
-                                className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-                              >
-                                Email
-                              </label>
-                            </div>
+                              Email
+                            </label>
+                          </div>
 
-                            <div className="flex justify-between items-center mt-4">
+                          <div className="flex justify-between items-center mt-4">
+                            <button
+                              type="submit"
+                              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                            >
+                              Register
+                            </button>
+                            <Link
+                              to={{
+                                pathname: "/login",
+                                state: { from: window.location.pathname },
+                              }}
+                            >
                               <button
-                                type="submit"
-                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                                type="button"
+                                className="bg-0 text-gray-400 py-2 px-4 rounded"
                               >
-                                Register
+                                Login
                               </button>
-                              <Link to="/login">
-                                <button
-                                  type="button"
-                                  className="bg-0 text-gray-400 py-2 px-4 rounded"
-                                >
-                                  Login
-                                </button>
-                              </Link>
-                            </div>
-                          </>
-                        )}
+                            </Link>
+                          </div>
+                        </>
+                        {/* )} */}
                       </form>
                     </div>
                   </div>

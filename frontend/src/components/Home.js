@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import heroImage from "../assets/images/11667324_20946011.jpg";
 
-const Home = ({ onLogout }) => {
+const Home = ({ onLogout, userId }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
 
@@ -31,14 +31,19 @@ const Home = ({ onLogout }) => {
             We provide a comprehensive solution for tracking and managing your
             products, orders, and suppliers.
           </p>
-          <div className="mt-4">
-            <Link
-              to="/login"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Login
-            </Link>
-          </div>
+          {userId === "" && (
+            <div className="mt-4">
+              <Link
+                to={{
+                  pathname: "/login",
+                  state: { from: window.location.pathname },
+                }}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Login
+              </Link>
+            </div>
+          )}
         </header>
 
         {/* <div className="mt-8">
@@ -52,7 +57,7 @@ const Home = ({ onLogout }) => {
           ) : (
             <>
               <Link
-                to="/login"
+                to={{ pathname: "/login", state: { from: window.location.pathname } }}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mr-4"
               >
                 Login

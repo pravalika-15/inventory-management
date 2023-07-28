@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
 
 const supplierSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    default: uuidv4,
-  },
   name: {
     type: String,
     required: true,
@@ -16,11 +11,19 @@ const supplierSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
   },
+  amount: {
+    type: Number,
+    default: 100,
+  },
   email: {
     type: String,
   },
   address: {
     type: String,
+  },
+  paymentStatus: {
+    type: String,
+    default: "Payment Pending!",
   },
 });
 

@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const OrderForm = () => {
+const OrderForm = ({ userId }) => {
   const [customer, setCustomer] = useState("");
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
-  const navigate = useState();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(userId);
     const newOrder = {
       customer,
       product,
       quantity,
+      userID: userId,
     };
-    console.log(newOrder);
 
     try {
       await axios.post("http://localhost:3006/api/orders", newOrder);
@@ -23,41 +22,66 @@ const OrderForm = () => {
       setCustomer("");
       setProduct("");
       setQuantity("");
-      navigate("/orders");
+      // Navigate to the desired page, e.g., orders page
     } catch (error) {
       console.error("Error creating order:", error);
     }
   };
 
   return (
-    <div>
-      <h2>Create New Order</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="customer">Customer:</label>
-        <input
-          type="text"
-          id="customer"
-          value={customer}
-          onChange={(event) => setCustomer(event.target.value)}
-        />
+    <div className="max-w-md mx-auto pt-5">
+      <h2 className="text-xl font-bold mb-4">Create New Order</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4  items-center justify-center my-auto"
+      >
+        <input type="hidden" value={userId} />
 
-        <label htmlFor="product">Product:</label>
-        <input
-          type="text"
-          id="product"
-          value={product}
-          onChange={(event) => setProduct(event.target.value)}
-        />
+        <div>
+          <label htmlFor="customer" className="block font-semibold">
+            Customer:
+          </label>
+          <input
+            type="text"
+            id="customer"
+            value={customer}
+            onChange={(event) => setCustomer(event.target.value)}
+            className="border border-gray-300 rounded px-2 py-1 w-full"
+          />
+        </div>
 
-        <label htmlFor="quantity">Quantity:</label>
-        <input
-          type="number"
-          id="quantity"
-          value={quantity}
-          onChange={(event) => setQuantity(event.target.value)}
-        />
+        <div>
+          <label htmlFor="product" className="block font-semibold">
+            Product:
+          </label>
+          <input
+            type="text"
+            id="product"
+            value={product}
+            onChange={(event) => setProduct(event.target.value)}
+            className="border border-gray-300 rounded px-2 py-1 w-full"
+          />
+        </div>
 
-        <button type="submit">Create Order</button>
+        <div>
+          <label htmlFor="quantity" className="block font-semibold">
+            Quantity:
+          </label>
+          <input
+            type="number"
+            id="quantity"
+            value={quantity}
+            onChange={(event) => setQuantity(event.target.value)}
+            className="border border-gray-300 rounded px-2 py-1 w-full"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+        >
+          Create Order
+        </button>
       </form>
     </div>
   );

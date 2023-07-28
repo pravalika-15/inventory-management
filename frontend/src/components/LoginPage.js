@@ -124,13 +124,14 @@
 // export default LoginPage;
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 function Login({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const url = "http://localhost:3006";
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -145,7 +146,7 @@ function Login({ onLogin }) {
     try {
       const token = localStorage.getItem("token");
       // console.log(JSON.stringify({ username, password }));
-      const response = await fetch("http://localhost:3006/api/login", {
+      const response = await fetch(`${url}/api/login`, {
         mode: "cors",
         method: "POST",
         headers: {
@@ -163,7 +164,14 @@ function Login({ onLogin }) {
         onLogin(token);
         setError("");
         console.log("Login successful");
-        navigate("/products");
+        console.log("state", location);
+        if (location.state && location.state.from) {
+          console.log(location.state.from);
+          navigate(location.state.from);
+        } else {
+          // If no previous location, navigate to "/products"
+          navigate("/products");
+        }
       } else {
         // Login failed
         const errorData = await response.json();
@@ -259,7 +267,12 @@ function Login({ onLogin }) {
               >
                 Sign in
               </button>
-              <Link to="/register">
+              <Link
+                to={{
+                  pathname: "/register",
+                  state: { from: window.location.pathname },
+                }}
+              >
                 <button
                   type="button"
                   className="bg-0 text-gray-400 py-2 px-4 rounded hover:text-black"
