@@ -155,8 +155,9 @@ router.get("/orders/:id", async (req, res) => {
 
 // Route for retrieving all orders
 router.get("/orders", async (req, res) => {
-  const { search } = req.query;
-  const ordersPerPage = 3;
+  const { search, date } = req.query;
+
+  const ordersPerPage = 12;
 
   try {
     let query = {};
@@ -164,14 +165,36 @@ router.get("/orders", async (req, res) => {
     if (search) {
       const searchTerm = new RegExp(search, "i");
       const isObjectId = /^[0-9a-fA-F]{24}$/.test(search);
+
       query = {
         $or: [
-          { userID: new mongoose.Types.ObjectId(search) },
-          { orderDate: searchTerm },
+          {
+            userID: isObjectId
+              ? new mongoose.Types.ObjectId(search)
+              : undefined,
+          },
+          // {
+          //   orderDate: isObjectId ? undefined : orderDateCondition,
+          // },
           { status: searchTerm },
-          { orderID: searchTerm },
+          {
+            orderID: isObjectId
+              ? new mongoose.Types.ObjectId(search)
+              : new RegExp(search, "i"), // Use a regular expression for partial matches
+          },
         ],
       };
+    }
+    if (date) {
+      // If the date parameter is provided, convert it to a date object and extract the date part
+      const dateObject = new Date(date);
+      if (!isNaN(dateObject)) {
+        // Set the query to match the selected date (without considering the time)
+        query.orderDate = {
+          $gte: dateObject.toISOString(), // Start of the selected date (00:00:00)
+          $lt: new Date(dateObject.getTime() + 86400000).toISOString(), // End of the selected date (23:59:59)
+        };
+      }
     }
 
     const totalOrders = await Order.countDocuments(query);
@@ -333,6 +356,178 @@ router.put("/orders/:id/status", async (req, res) => {
   } catch (error) {
     console.error("Error updating order status:", error);
     res.status(500).json({ error: "Failed to update the order status" });
+  }
+});
+
+// for analytics
+
+// Route for getting product sales data
+router.get("/product-sales", async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $unwind: "$items",
+      },
+      {
+        $group: {
+          _id: "$items.product",
+          totalQuantitySold: { $sum: "$items.quantity" },
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: "$productDetails",
+      },
+      {
+        $project: {
+          _id: 0,
+          product: "$productDetails.name",
+          totalQuantitySold: 1,
+        },
+      },
+      {
+        $sort: { totalQuantitySold: -1 },
+      },
+    ];
+
+    const productSales = await Order.aggregate(pipeline);
+    res.json(productSales);
+  } catch (error) {
+    console.error("Error fetching product sales data:", error);
+    res.status(500).json({ error: "Failed to fetch product sales data" });
+  }
+});
+
+router.get("/customer-orders", async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $unwind: "$items",
+      },
+      {
+        $group: {
+          _id: "$userID",
+          totalQuantityOrdered: { $sum: "$items.quantity" },
+        },
+      },
+      {
+        $sort: { totalQuantityOrdered: -1 },
+      },
+    ];
+
+    const customerOrders = await Order.aggregate(pipeline);
+    res.json(customerOrders);
+  } catch (error) {
+    console.error("Error fetching customer order data:", error);
+    res.status(500).json({ error: "Failed to fetch customer order data" });
+  }
+});
+
+router.get("/monthly-revenue/:year", async (req, res) => {
+  try {
+    let year = req.params.year
+      ? parseInt(req.params.year)
+      : new Date().getFullYear();
+
+    if (isNaN(year)) {
+      // Handle the case where the year parameter is not a valid number
+      year = new Date().getFullYear(); // Set default to current year
+    }
+    console.log(year);
+    const pipeline = [
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(year, 0, 1), // Start of the year
+            $lt: new Date(year + 1, 0, 1), // Start of the next year
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$orderDate" } },
+          totalRevenue: { $sum: "$totalPrice" },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ];
+
+    const monthlyRevenue = await Order.aggregate(pipeline);
+    res.json(monthlyRevenue);
+  } catch (error) {
+    console.error("Error fetching monthly revenue data:", error);
+    res.status(500).json({ error: "Failed to fetch monthly revenue data" });
+  }
+});
+
+// Route for fetching monthly order count data
+router.get("/monthly-order-count/:year", async (req, res) => {
+  try {
+    const { year } = req.params;
+
+    const pipeline = [
+      {
+        $match: {
+          orderDate: {
+            $gte: new Date(year, 0, 1), // Start of the year
+            $lt: new Date(year + 1, 0, 1), // Start of the next year
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$orderDate" } },
+          orderCount: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ];
+
+    const monthlyOrderCount = await Order.aggregate(pipeline);
+    res.json(monthlyOrderCount);
+  } catch (error) {
+    console.error("Error fetching monthly order count data:", error);
+    res.status(500).json({ error: "Failed to fetch monthly order count data" });
+  }
+});
+
+// Route to get order analytics for a user by user ID and year
+router.get("/order-analytics/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    // console.log("userId", userId);
+    const year = new Date().getFullYear();
+
+    const orders = await Order.find({
+      userID: userId,
+      orderDate: {
+        $gte: new Date(year, 0, 1), // Start of the year
+        $lt: new Date(year + 1, 0, 1), // Start of the next year
+      },
+    });
+
+    const orderCountByMonth = new Array(12).fill(0);
+
+    orders.forEach((order) => {
+      const month = order.orderDate.getMonth();
+      orderCountByMonth[month] += 1;
+    });
+
+    res.json(orderCountByMonth);
+  } catch (error) {
+    console.error("Error fetching order analytics:", error);
+    res.status(500).json({ error: "Failed to fetch order analytics" });
   }
 });
 

@@ -263,7 +263,7 @@ const SupplierTable = () => {
       setShowConfirmModal(true);
       setSupplierToDeleteId(supplierId);
     } else {
-      deleteSupplier(supplierId);
+      handleDeleteWithConfirmation(supplierId);
     }
   };
 

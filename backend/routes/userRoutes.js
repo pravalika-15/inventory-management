@@ -190,7 +190,7 @@ router.post("/register", async (req, res) => {
 
 // Get all users
 router.get("/users", async (req, res) => {
-  const usersPerPage = 3;
+  const usersPerPage = 12;
   const { search } = req.query;
 
   try {

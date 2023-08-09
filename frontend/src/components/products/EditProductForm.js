@@ -55,6 +55,7 @@ const EditProduct = () => {
         },
         body: JSON.stringify(productData),
       });
+      // console.log(response);
 
       if (response.ok) {
         setSuccess(true);

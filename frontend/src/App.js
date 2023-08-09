@@ -26,12 +26,17 @@ import axios from "axios";
 import Cart from "./components/Cart/Cart";
 import PageNotFound from "./components/PageNotFound";
 import ImportData from "./components/products/ImportData";
+import AnalyticsDashboard from "./components/Chart/AnalyticsDashboard";
+import CustomerOrderAnalytics from "./components/Chart/CustomerOrderAnalytics";
+import MonthlyRevenueChart from "./components/Chart/MonthlyRevenueChart";
+import Chart from "./components/Charts";
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [userId, setUserId] = useState(""); // Add state for storing user role
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetchingUserData, setFetchingUserData] = useState(true);
 
   useEffect(() => {
     // Check if the user is authenticated by verifying the token in sessionStorage
@@ -63,6 +68,7 @@ function App() {
 
   useEffect(() => {
     if (userId) {
+      setFetchingUserData(true);
       fetchUserData(userId);
     }
   }, [userId]);
@@ -80,8 +86,12 @@ function App() {
       );
       setUserData(response.data);
       console.log("user data", userData);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setLoading(false);
+    } finally {
+      setFetchingUserData(false); // Done fetching user data
     }
   };
 
@@ -150,16 +160,22 @@ function App() {
               />
 
               {authenticated && (
-                <Route
-                  path="/orders"
-                  element={
-                    <OrderList
-                      role={role}
-                      userId={userId}
-                      userData={userData}
+                <>
+                  {fetchingUserData ? (
+                    <>Loading user data...</>
+                  ) : (
+                    <Route
+                      path="/orders"
+                      element={
+                        <OrderList
+                          role={role}
+                          userId={userId}
+                          userData={userData}
+                        />
+                      }
                     />
-                  }
-                />
+                  )}
+                </>
               )}
 
               {authenticated && role === "admin" && (
@@ -184,6 +200,16 @@ function App() {
                     path="/products/import-data"
                     element={<ImportData userRole={userData} />}
                   />
+                  <Route path="/chart" element={<Chart />} />
+                  {/* <Route path="/analytics" element={<AnalyticsDashboard />} />
+                  <Route
+                    path="/order-analytics"
+                    element={<CustomerOrderAnalytics />}
+                  />
+                  <Route
+                    path="/monthly-revenue-analytics"
+                    element={<MonthlyRevenueChart />}
+                  /> */}
                 </>
               )}
 

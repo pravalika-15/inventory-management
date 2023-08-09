@@ -29,6 +29,7 @@ const Cart = ({ userId }) => {
       // Iterate over the cart items and fetch the product data for each item
       const updatedCartItems = await Promise.all(
         cartItems.map(async (item) => {
+          console.log("item", item);
           const productId = item.productId._id;
 
           // Fetch the product data using the product ID

@@ -16,10 +16,6 @@ const ProductListing = ({ role, userId }) => {
   const searchTimeoutRef = useRef(null);
   const navigate = useNavigate();
 
-  // Introduce a debouncing delay in milliseconds (e.g., 500ms)
-  const debounceDelay = 500;
-  let searchTimeout;
-
   useEffect(() => {
     if (searchQuery === "") {
       // Fetch data without search query
@@ -116,11 +112,11 @@ const ProductListing = ({ role, userId }) => {
       // Only trigger the API call when there is a non-empty search query
       if (searchQuery.trim() !== "") {
         setSearchQuery(searchQuery.trim());
-        handlePagination(1, searchQuery.trim());
+        setCurrentPage(1);
       } else {
         // If the search query is empty, fetch data without search query
+        setCurrentPage(1);
         setSearchQuery("");
-        handlePagination(1);
       }
     }, 500);
   };

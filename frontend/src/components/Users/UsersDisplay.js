@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-
+import OrderAnalyticsModal from "../Chart/OrderAnalyticsModal";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -17,7 +17,15 @@ const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const searchTimeoutRef = useRef(null);
   // const [error, setError]
-
+  const [isOrderAnalyticsModalOpen, setIsOrderAnalyticsModalOpen] =
+    useState(false);
+  const [selectedUserForAnalytics, setSelectedUserForAnalytics] =
+    useState(null);
+  const handleViewAnalytics = (user) => {
+    // console.log("user", user);
+    setSelectedUserForAnalytics(user);
+    setIsOrderAnalyticsModalOpen(true);
+  };
   useEffect(() => {
     if (searchQuery === "") {
       // Fetch data without search query
@@ -186,9 +194,15 @@ const Users = () => {
                   </h3>
                   <p className="text-gray-600 mb-2">Phone: {user.phone}</p>
                   <p className="text-gray-600 mb-2">Email: {user.email}</p>
-                  <div className="flex justify-end mt-2">
+                  <div className="flex justify-end mt-2 gap-2">
                     <button
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded mr-2"
+                      className="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded"
+                      onClick={() => handleViewAnalytics(user)} // Add this
+                    >
+                      View Order Analytics
+                    </button>
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded"
                       onClick={() => handleUpdate(user)}
                     >
                       Update
@@ -202,31 +216,30 @@ const Users = () => {
                   </div>
                 </div>
               ))}
-
-              <div className="pagination flex items-center justify-center mt-8">
-                <button
-                  id="prevPageBtn"
-                  onClick={handlePrevPage}
-                  disabled={currentPage === 1}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
-                <span id="currentPage" className="text-gray-600 font-bold mx-2">
-                  {currentPage}
-                </span>
-                <span id="totalPages" className="text-gray-500">
-                  of {totalPages}
-                </span>
-                <button
-                  id="nextPageBtn"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </div>
+            </div>
+            <div className="pagination flex items-center justify-center mt-8">
+              <button
+                id="prevPageBtn"
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              <span id="currentPage" className="text-gray-600 font-bold mx-2">
+                {currentPage}
+              </span>
+              <span id="totalPages" className="text-gray-500">
+                of {totalPages}
+              </span>
+              <button
+                id="nextPageBtn"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
             </div>
 
             {selectedUser && (
@@ -314,6 +327,13 @@ const Users = () => {
             )}
           </div>
         </>
+      )}
+
+      {isOrderAnalyticsModalOpen && selectedUserForAnalytics !== null && (
+        <OrderAnalyticsModal
+          userId={selectedUserForAnalytics._id}
+          onClose={() => setIsOrderAnalyticsModalOpen(false)}
+        />
       )}
     </>
   );

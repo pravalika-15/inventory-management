@@ -19,10 +19,6 @@ async function connectToDatabase() {
     const collectionNames = collections.map((collection) => collection.name);
     console.log("Collections:", collectionNames);
 
-    // Fetching all data from the "products" collection
-    // const productsList = await Product.find();
-
-    // console.log("Products:", productsList);
   } catch (error) {
     console.error("Error connecting to the database:", error);
   }
