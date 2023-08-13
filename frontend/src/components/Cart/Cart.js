@@ -96,7 +96,8 @@ const Cart = ({ userId }) => {
         `http://localhost:3006/api/cart/${itemId}`
       );
       console.log("Cart item removed");
-      console.log("response");
+      console.log(response);
+
       // Remove the item from the cartItems state
       const updatedCartItems = cartItems.filter((item) => item._id !== itemId);
       setCartItems(updatedCartItems);
@@ -265,7 +266,7 @@ const Cart = ({ userId }) => {
                 </ul>
                 <div className="mt-8">
                   <h3 className="text-lg font-semibold">
-                    Total Price: ${totalPrice.toFixed(2)}
+                    Total Price: ₹{totalPrice.toFixed(2)}
                   </h3>
                   <button
                     className="mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"

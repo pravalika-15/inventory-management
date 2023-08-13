@@ -19,9 +19,11 @@ const ProductListing = ({ role, userId }) => {
   useEffect(() => {
     if (searchQuery === "") {
       // Fetch data without search query
+      setCurrentPage(1);
       handlePagination(currentPage);
     } else {
       // Fetch data with search query
+      setCurrentPage(1);
       handlePagination(currentPage, searchQuery);
     }
 
@@ -29,7 +31,21 @@ const ProductListing = ({ role, userId }) => {
     return () => {
       clearTimeout(searchTimeoutRef.current);
     };
-  }, [currentPage, searchQuery]);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      // Fetch data without search query
+      handlePagination(currentPage);
+    } else {
+      handlePagination(currentPage, searchQuery);
+    }
+
+    // Clean up the timeout on component unmount
+    return () => {
+      clearTimeout(searchTimeoutRef.current);
+    };
+  }, [currentPage]);
   // Function to fetch the cart data from the server
   const fetchCartData = async () => {
     try {
@@ -79,10 +95,11 @@ const ProductListing = ({ role, userId }) => {
         setProducts(data.products);
         setCurrentPage(data.currentPage);
         setTotalPages(data.totalPages);
-        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -107,14 +124,11 @@ const ProductListing = ({ role, userId }) => {
       clearTimeout(searchTimeoutRef.current);
     }
 
-    // Set a new timeout to trigger the API call after debounce delay (e.g., 500ms)
     searchTimeoutRef.current = setTimeout(() => {
-      // Only trigger the API call when there is a non-empty search query
       if (searchQuery.trim() !== "") {
         setSearchQuery(searchQuery.trim());
         setCurrentPage(1);
       } else {
-        // If the search query is empty, fetch data without search query
         setCurrentPage(1);
         setSearchQuery("");
       }
@@ -261,13 +275,13 @@ const ProductListing = ({ role, userId }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="border border-gray-300 rounded py-2 px-4 w-1/2 mr-4"
               />
-              <button
+              {/* <button
                 id="search-button"
                 onClick={handleSearch}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
                 Search
-              </button>
+              </button> */}
             </div>
             <main>
               <h1 className="text-3xl font-bold mb-8">Product Listing</h1>
@@ -284,7 +298,7 @@ const ProductListing = ({ role, userId }) => {
                       Category: {product.category}
                     </p>
                     <p className="text-gray-600 mb-2">
-                      Price: ${product.price.toFixed(2)}
+                      Price: ₹{product.price.toFixed(2)}
                     </p>
                     <p className="text-gray-600 mb-2">
                       Quantity: {product.quantity}
@@ -306,15 +320,21 @@ const ProductListing = ({ role, userId }) => {
                           </div>
                         ) : (
                           <div className="mt-4 flex">
+                            {/* {console.log(
+                              cart.some(
+                                (item) => item.productId._id === product._id
+                              )
+                            )} */}
                             {cart.some(
-                              (item) => item.productId === product._id
+                              (item) => item.productId._id === product._id
                             ) ? (
                               <>
                                 <button
                                   onClick={() =>
                                     handleDecrementQuantity(
                                       cart.find(
-                                        (item) => item.productId === product._id
+                                        (item) =>
+                                          item.productId._id === product._id
                                       )._id
                                     )
                                   }
@@ -325,7 +345,8 @@ const ProductListing = ({ role, userId }) => {
                                 <span className="font-semibold mx-2">
                                   {
                                     cart.find(
-                                      (item) => item.productId === product._id
+                                      (item) =>
+                                        item.productId._id === product._id
                                     ).quantity
                                   }
                                 </span>
@@ -333,7 +354,8 @@ const ProductListing = ({ role, userId }) => {
                                   onClick={() =>
                                     handleIncrementQuantity(
                                       cart.find(
-                                        (item) => item.productId === product._id
+                                        (item) =>
+                                          item.productId._id === product._id
                                       )._id
                                     )
                                   }

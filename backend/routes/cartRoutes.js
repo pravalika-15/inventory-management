@@ -109,13 +109,13 @@ router.delete("/cart/:itemId", async (req, res) => {
     );
 
     if (cart) {
-      res.json({ message: "Item removed from cart" });
+      return res.json({ message: "Item removed from cart" });
     } else {
-      res.status(404).json({ error: "Item not found in cart" });
+      return res.status(404).json({ error: "Item not found in cart" });
     }
   } catch (error) {
     console.error("Error removing item from cart:", error);
-    res.status(500).json({ error: "Failed to remove item from cart" });
+    return res.status(500).json({ error: "Failed to remove item from cart" });
   }
 });
 

@@ -7,6 +7,8 @@ const User = require("../Schema//userModel");
 const Product = require("../Schema/productModel");
 const Supplier = require("../Schema/supplierModel");
 const mongoose = require("mongoose");
+const { startOfDay, endOfDay, parseISO } = require("date-fns");
+const { utcToZonedTime } = require("date-fns-tz");
 const {
   sendCustomizedEmailToAdmin,
   sendCustomizedEmail,
@@ -272,25 +274,39 @@ router.delete("/orders/:id", async (req, res) => {
   }
 });
 
-// Route for retrieving orders for a specific user with search and pagination
+// Route for retrieving orders for a specific user with search, date, and pagination
 router.get("/orders/user/:userId", async (req, res) => {
   const { userId } = req.params;
-  const { search } = req.query;
+  const { search, date } = req.query;
+  console.log(req.query);
+  console.log("search", search);
+  console.log("date", date);
   const ordersPerPage = 10;
 
   try {
     let query = { userID: userId };
 
-    if (search) {
-      const searchTerm = new RegExp(search, "i");
-      query = {
-        ...query,
-        $or: [
-          { orderDate: searchTerm },
-          { status: searchTerm },
-          { orderID: searchTerm },
-        ],
-      };
+    if (search || date) {
+      const conditions = [];
+
+      if (search) {
+        const searchTerm = new RegExp(search, "i");
+        conditions.push({
+          $or: [{ status: searchTerm }, { orderID: searchTerm }],
+        });
+      }
+
+      if (date) {
+        const startDate = new Date(date);
+        startDate.setUTCHours(0, 0, 0, 0);
+        console.log(startDate);
+        const endDate = new Date(date);
+        endDate.setUTCHours(23, 59, 59, 999);
+        console.log(endDate);
+        conditions.push({ orderDate: { $gte: startDate, $lte: endDate } });
+      }
+
+      query = { ...query, $and: conditions };
     }
 
     const totalOrders = await Order.countDocuments(query);

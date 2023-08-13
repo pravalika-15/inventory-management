@@ -28,13 +28,37 @@ const OrderList = ({ role, userId, userData }) => {
   const [key, setKey] = useState(0);
 
   useEffect(() => {
-    handlePagination(currentPage, searchQuery);
+    handlePagination(currentPage, searchQuery, selectedDate);
 
     // Clean up the timeout on component unmount
     return () => {
-      clearTimeout(debounceTimerRef.current);
+      clearTimeout(debounceTimerRef.current, selectedDate);
     };
-  }, [currentPage, searchQuery]);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      // Fetch data without search query
+      setCurrentPage(1);
+      handlePagination(currentPage, selectedDate);
+    } else {
+      // Fetch data with search query
+      setCurrentPage(1);
+      handlePagination(currentPage, searchQuery, selectedDate);
+    }
+
+    // Clean up the timeout on component unmount
+    return () => {
+      clearTimeout(searchTimeoutRef.current);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    handlePagination(currentPage, searchQuery, selectedDate);
+    return () => {
+      clearTimeout(searchTimeoutRef.current);
+    };
+  }, [selectedDate]);
 
   const inputChanged = (e) => {
     const query = e.target.value;
@@ -48,10 +72,10 @@ const OrderList = ({ role, userId, userData }) => {
     // Set a new timer to trigger the API call after debounce delay (e.g., 500ms)
     debounceTimerRef.current = setTimeout(() => {
       if (query) {
-        setLoading(true);
+        // setLoading(true);
         handlePagination(1, query);
       } else {
-        setLoading(true);
+        // setLoading(true);
         handlePagination(1);
       }
     }, 500);
@@ -62,8 +86,8 @@ const OrderList = ({ role, userId, userData }) => {
     searchQuery = "",
     selectedDate = ""
   ) => {
-    console.log("role", role);
-    setLoading(true);
+    // console.log("role", role);
+    // setLoading(true);
     setCurrentPage(page);
 
     try {
@@ -74,7 +98,19 @@ const OrderList = ({ role, userId, userData }) => {
       }
 
       if (selectedDate) {
-        url += `?page=${page}&search=${searchQuery}&date=${selectedDate}`;
+        console.log("selectedDate", selectedDate);
+        const timezoneOffset = selectedDate.getTimezoneOffset();
+        const adjustedDate = new Date(
+          selectedDate.getTime() - timezoneOffset * 60000
+        );
+        console.log(adjustedDate);
+        const isoFormattedDate = adjustedDate.toISOString().split("T")[0];
+        console.log("isoFormattedDate:", isoFormattedDate);
+        // const isoFormattedDate = new Date(selectedDate)
+        //   .toISOString()
+        //   .split("T")[0];
+        console.log(isoFormattedDate);
+        url += `?page=${page}&search=${searchQuery}&date=${isoFormattedDate}`;
       } else {
         url += `?page=${page}&search=${searchQuery}`;
       }
@@ -379,13 +415,13 @@ const OrderList = ({ role, userId, userData }) => {
                 placeholderText="Select Date" // Placeholder text for the date picker
                 className="border border-gray-300 rounded py-2 px-4 w-full"
               />
-              <button
+              {/* <button
                 id="search-button"
                 onClick={handleSearch}
                 className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               >
                 Search
-              </button>
+              </button> */}
             </div>
             <div>
               {role === "user" && (

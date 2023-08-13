@@ -30,7 +30,24 @@ const SupplierTable = () => {
     return () => {
       clearTimeout(searchTimeoutRef.current);
     };
-  }, [currentPage, searchQuery]);
+  }, [currentPage]);
+
+  useEffect(() => {
+    if (searchQuery === "") {
+      // Fetch data without search query
+      setCurrentPage(1);
+      handlePagination(currentPage);
+    } else {
+      // Fetch data with search query
+      setCurrentPage(1);
+      handlePagination(currentPage, searchQuery);
+    }
+
+    // Clean up the timeout on component unmount
+    return () => {
+      clearTimeout(searchTimeoutRef.current);
+    };
+  }, [searchQuery]);
   const handlePagination = (page, search = "") => {
     fetch(`http://localhost:3006/api/suppliers?page=${page}&search=${search}`)
       .then((response) => response.json())
