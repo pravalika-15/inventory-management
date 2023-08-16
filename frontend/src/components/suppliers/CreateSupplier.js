@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../../assets/css/supplier.css";
 import { useNavigate } from "react-router-dom";
+const url = "https://inventory-5yt3.onrender.com/api";
+
 const SupplierCreateForm = () => {
   const [name, setName] = useState("");
   const [contactName, setContactName] = useState("");
@@ -91,7 +93,7 @@ const SupplierCreateForm = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3006/api/suppliers", {
+      const response = await axios.post(`${url}/suppliers`, {
         name,
         contactName,
         phoneNumber,

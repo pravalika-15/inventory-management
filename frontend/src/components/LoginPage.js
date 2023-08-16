@@ -30,7 +30,7 @@
 //   const checkUserExists = async (sub) => {
 //     try {
 //       console.log("checking!!");
-//       const response = await fetch(`http://localhost:3006/api/users/${sub}`);
+//       const response = await fetch(`${url}/users/${sub}`);
 //       const userExists = await response.json();
 //       console.log(response.ok);
 
@@ -131,7 +131,7 @@ function Login({ onLogin }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const url = "http://localhost:3006";
+  const url = "https://inventory-5yt3.onrender.com/api";
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };

@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import Modal from "react-modal";
 import ImportSuppliers from "./ImportDataSupplies";
 import ExportSuppliers from "./ExportDataSuppliers";
+const url = "https://inventory-5yt3.onrender.com/api";
 const SupplierTable = () => {
   const navigate = useNavigate();
   const [suppliers, setSuppliers] = useState([]);
@@ -50,7 +51,7 @@ const SupplierTable = () => {
     };
   }, [searchQuery]);
   const handlePagination = (page, search = "") => {
-    fetch(`http://localhost:3006/api/suppliers?page=${page}&search=${search}`)
+    fetch(`${url}/suppliers?page=${page}&search=${search}`)
       .then((response) => response.json())
       .then((data) => {
         setSuppliers(data.suppliers);
@@ -108,7 +109,7 @@ const SupplierTable = () => {
 
     if (isConfirmed) {
       axios
-        .delete(`http://localhost:3006/api/suppliers/${supplierId}`)
+        .delete(`${url}/suppliers/${supplierId}`)
         .then(() => {
           const updatedSuppliers = suppliers.filter(
             (supplier) => supplier._id !== supplierId
@@ -142,14 +143,11 @@ const SupplierTable = () => {
         name: "StockCentral",
         description: "Payment for Supplier",
         handler: async function () {
-          const response = await axios.post(
-            "http://localhost:3006/api/payments",
-            {
-              supplierId: supplierId,
-              amount: amount,
-              currency: "INR",
-            }
-          );
+          const response = await axios.post(`${url}/payments`, {
+            supplierId: supplierId,
+            amount: amount,
+            currency: "INR",
+          });
           console.log(response);
           const order = response.data;
           console.log("order", order);
@@ -168,7 +166,7 @@ const SupplierTable = () => {
           setSuppliers(updatedSuppliers);
 
           axios
-            .put(`http://localhost:3006/api/suppliers/${supplierId}/payment`, {
+            .put(`${url}/suppliers/${supplierId}/payment`, {
               amount: 0,
               paymentStatus: "Payment Done",
             })
@@ -211,14 +209,11 @@ const SupplierTable = () => {
         name: "StockCentral",
         description: "Payment for Supplier",
         handler: async function () {
-          const response = await axios.post(
-            "http://localhost:3006/api/payments",
-            {
-              supplierId: supplierId,
-              amount: amount,
-              currency: "INR",
-            }
-          );
+          const response = await axios.post(`${url}/payments`, {
+            supplierId: supplierId,
+            amount: amount,
+            currency: "INR",
+          });
           console.log(response);
           const order = response.data;
           // If payment is successful, proceed with the deletion
@@ -241,7 +236,7 @@ const SupplierTable = () => {
           setSuppliers(updatedSuppliers);
 
           axios
-            .put(`http://localhost:3006/api/suppliers/${supplierId}`, {
+            .put(`${url}/suppliers/${supplierId}`, {
               amount: 0,
               paymentStatus: "Payment Done",
             })
@@ -307,7 +302,7 @@ const SupplierTable = () => {
 
   const deleteSupplier = (supplierId) => {
     axios
-      .delete(`http://localhost:3006/api/suppliers/${supplierId}`)
+      .delete(`${url}/suppliers/${supplierId}`)
       .then(() => {
         const updatedSuppliers = suppliers.filter(
           (supplier) => supplier._id !== supplierId

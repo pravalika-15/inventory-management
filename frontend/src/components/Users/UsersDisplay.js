@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import OrderAnalyticsModal from "../Chart/OrderAnalyticsModal";
+const url = "https://inventory-5yt3.onrender.com/api";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -61,7 +62,7 @@ const Users = () => {
   }, [searchQuery]);
 
   const handlePagination = (page, search = "") => {
-    fetch(`http://localhost:3006/api/users?page=${page}&search=${search}`)
+    fetch(`${url}/users?page=${page}&search=${search}`)
       .then((response) => response.json())
       .then((data) => {
         // console.log(data);
@@ -133,7 +134,7 @@ const Users = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:3006/api/users/${userId}`);
+      await axios.delete(`${url}/users/${userId}`);
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
       alert("User deleted successfully");
       console.log("User deleted successfully");
@@ -149,7 +150,7 @@ const Users = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3006/api/users/${selectedUser._id}`,
+        `${url}/users/${selectedUser._id}`,
         formData
       );
 

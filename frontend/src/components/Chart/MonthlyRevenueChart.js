@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const MonthlyRevenueChart = ({ year }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     // Fetch monthly revenue data from the API
-    fetch(`http://localhost:3006/api/monthly-revenue/${year}`)
+    fetch(`${url}/monthly-revenue/${year}`)
       .then((response) => response.json())
       .then((monthlyRevenueData) => {
         const labels = Array.from({ length: 12 }, (_, i) => i + 1); // Months from 1 to 12

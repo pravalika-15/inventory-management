@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import Chart from "chart.js/auto"; // Import the specific Chart component
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const AnalyticsDashboard = () => {
   useEffect(() => {
     let myChart;
 
     // Fetch product sales data from your backend API
-    fetch("http://localhost:3006/api/product-sales")
+    fetch(`${url}/product-sales`)
       .then((response) => response.json())
       .then((productSalesData) => {
         // Extract labels and data for the chart

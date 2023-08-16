@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa"; // Import the cart icon
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const NavBar = ({ authenticated, onLogout, userData }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -28,7 +28,10 @@ const NavBar = ({ authenticated, onLogout, userData }) => {
     <>
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="http://localhost:3000/" className="flex items-center">
+          <a
+            href="https://main--sensational-muffin-3ff308.netlify.app"
+            className="flex items-center"
+          >
             <img
               src="https://flowbite.com/docs/images/logo.svg"
               className="h-8 mr-3"

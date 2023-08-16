@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Chart from "chart.js/auto";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const OrderAnalyticsModal = ({ userId, onClose }) => {
   const [orderData, setOrderData] = useState([]);
 
@@ -8,7 +8,7 @@ const OrderAnalyticsModal = ({ userId, onClose }) => {
 
   useEffect(() => {
     // Fetch order analytics data for the user from the API
-    fetch(`http://localhost:3006/api/order-analytics/${userId}`)
+    fetch(`${url}/order-analytics/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         setOrderData(data);

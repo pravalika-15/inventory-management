@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const CustomerOrderAnalytics = () => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     // Fetch customer order data from the API
-    fetch("http://localhost:3006/api/customer-orders")
+    fetch(`${url}/customer-orders`)
       .then((response) => response.json())
       .then((customerOrderData) => {
         const labels = customerOrderData.map((item) => item._id);

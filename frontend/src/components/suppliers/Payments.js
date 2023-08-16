@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const Payments = () => {
   const { id } = useParams();
   const [payments, setPayments] = useState([]);
@@ -12,9 +12,7 @@ const Payments = () => {
 
   const fetchPayments = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3006/api/suppliers/${id}/payments`
-      );
+      const response = await axios.get(`${url}/suppliers/${id}/payments`);
       setPayments(response.data);
     } catch (error) {
       console.error("Error fetching payments:", error);

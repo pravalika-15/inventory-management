@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 function Register({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,7 @@ function Register({ onLogin }) {
     try {
       console.log(JSON.stringify({ username, password, phone, email }));
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3006/api/register", {
+      const response = await fetch(`${url}/register`, {
         mode: "cors",
         method: "POST",
         headers: {

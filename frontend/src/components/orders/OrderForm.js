@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const OrderForm = ({ userId }) => {
   const [customer, setCustomer] = useState("");
   const [product, setProduct] = useState("");
@@ -17,7 +17,7 @@ const OrderForm = ({ userId }) => {
     };
 
     try {
-      await axios.post("http://localhost:3006/api/orders", newOrder);
+      await axios.post(`${url}/orders`, newOrder);
       console.log("New order created");
       setCustomer("");
       setProduct("");

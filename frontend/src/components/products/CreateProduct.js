@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const CreateProduct = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -24,7 +24,7 @@ const CreateProduct = () => {
     console.log(newProduct);
 
     try {
-      const response = await fetch("http://localhost:3006/api/products", {
+      const response = await fetch(`${url}/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,13 +40,13 @@ const CreateProduct = () => {
         // Redirect to the product listing page or perform any other desired action
       } else {
         // Product creation failed
-        const data = await response.json(); 
+        const data = await response.json();
         setError(data.error);
         console.error("Failed to create product");
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      setError("Failed to create product"); 
+      setError("Failed to create product");
     }
   };
   return (

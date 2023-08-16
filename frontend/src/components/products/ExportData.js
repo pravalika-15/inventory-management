@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-const url = "http://localhost:3006/api";
+const url = "https://inventory-5yt3.onrender.com/api";
 const ExportData = () => {
   const [format, setFormat] = useState("csv");
   const [feedback, setFeedback] = useState({ message: "", isError: false });

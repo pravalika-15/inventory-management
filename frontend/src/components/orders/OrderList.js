@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 // import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+const url1 = "https://inventory-5yt3.onrender.com/api";
 const OrderList = ({ role, userId, userData }) => {
   const [orders, setOrders] = useState([]);
   // const navigate = useNavigate();
@@ -91,10 +92,10 @@ const OrderList = ({ role, userId, userData }) => {
     setCurrentPage(page);
 
     try {
-      let url = "http://localhost:3006/api/orders";
+      let url = `${url1}/orders`;
 
       if (role === "user") {
-        url = `http://localhost:3006/api/orders/user/${userId}`;
+        url = `${url1}/orders/user/${userId}`;
       }
 
       if (selectedDate) {
@@ -190,9 +191,7 @@ const OrderList = ({ role, userId, userData }) => {
   const fetchProductName = async (productId) => {
     try {
       console.log(productId);
-      const response = await axios.get(
-        `http://localhost:3006/api/products/${productId}`
-      );
+      const response = await axios.get(`${url1}/products/${productId}`);
       // console.log(response.data.name);
       return response.data.name;
     } catch (error) {
@@ -208,7 +207,7 @@ const OrderList = ({ role, userId, userData }) => {
 
     if (isConfirmed) {
       axios
-        .delete(`http://localhost:3006/api/orders/${orderId}`)
+        .delete(`${url1}/orders/${orderId}`)
         .then(() => {
           const updatedOrders = orders.filter((order) => order._id !== orderId);
           setOrders(updatedOrders);
@@ -237,7 +236,7 @@ const OrderList = ({ role, userId, userData }) => {
       setModalLoading(true); // Set loading to true when the user clicks "Save"
       setSavingMessage("Saving update...");
       axios
-        .put(`http://localhost:3006/api/orders/${selectedOrderId}/status`, {
+        .put(`${url1}/orders/${selectedOrderId}/status`, {
           status: selectedStatus,
         })
         .then((response) => {
@@ -259,9 +258,7 @@ const OrderList = ({ role, userId, userData }) => {
 
   const handleViewPaymentDetails = async (orderId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3006/api/order-payments/${orderId}`
-      );
+      const response = await axios.get(`${url1}/order-payments/${orderId}`);
       setSelectedPaymentDetails(response.data);
       setShowPaymentCard(true);
       setSelectedOrderId(orderId);
@@ -280,7 +277,7 @@ const OrderList = ({ role, userId, userData }) => {
 
     if (isConfirmed) {
       axios
-        .put(`http://localhost:3006/api/orders/${orderId}/status`, {
+        .put(`${url1}/orders/${orderId}/status`, {
           status: "Waiting for cancellation confirmation",
         })
         .then((response) => {
@@ -306,9 +303,7 @@ const OrderList = ({ role, userId, userData }) => {
   const handleInitiateRefund = async (orderId) => {
     try {
       // Make a GET request to fetch the order details using the orderId
-      const response = await axios.get(
-        `http://localhost:3006/api/orders/${orderId}`
-      );
+      const response = await axios.get(`${url1}/orders/${orderId}`);
       const order = response.data;
 
       // Calculate the refund amount based on the order total price
@@ -338,21 +333,18 @@ const OrderList = ({ role, userId, userData }) => {
             setOrders(updatedOrders);
             console.log("Refund successful!", response);
             // Make a POST request to your backend to create a new refund entry in /order-payments
-            const refundResponse = await axios.post(
-              `http://localhost:3006/api/order-payments`,
-              {
-                orderId,
-                paymentId: orderId,
-                amount,
-                currency,
-                status: "Refund initiated",
-              }
-            );
+            const refundResponse = await axios.post(`${url1}/order-payments`, {
+              orderId,
+              paymentId: orderId,
+              amount,
+              currency,
+              status: "Refund initiated",
+            });
             console.log(refundResponse.data);
 
             // Update the order status to "refund initiated" in the backend
             const updateResponse = await axios.put(
-              `http://localhost:3006/api/orders/${orderId}/status`,
+              `${url1}/orders/${orderId}/status`,
               { status: "Refund initiated" }
             );
             if (updateResponse.data.status === "Refund initiated") {

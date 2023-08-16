@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
+const url = "https://inventory-5yt3.onrender.com/api";
 const OrderEditForm = () => {
   const { id } = useParams();
   console.log(id);
@@ -12,7 +13,7 @@ const OrderEditForm = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3006/api/orders/${id}`)
+      .get(`${url}/orders/${id}`)
       .then((response) => {
         setOrder(response.data);
         setCustomer(response.data.customer);
@@ -37,7 +38,7 @@ const OrderEditForm = () => {
 
     // Send the updated order to the backend API
     axios
-      .put(`http://localhost:3006/api/orders/${id}/edit`, updatedOrder)
+      .put(`${url}/orders/${id}/edit`, updatedOrder)
       .then((response) => {
         console.log("Order updated:", response.data);
         // window.location.href = "/orders";

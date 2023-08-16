@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const MonthlyOrderCountChart = () => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     // Fetch monthly order count data from the API
-    fetch(`http://localhost:3006/api/monthly-order-count/2023`) // Replace with the appropriate API endpoint
+    fetch(`${url}/monthly-order-count/2023`) // Replace with the appropriate API endpoint
       .then((response) => response.json())
       .then((monthlyOrderCountData) => {
         const labels = Array.from({ length: 12 }, (_, i) => i + 1); // Months from 1 to 12

@@ -30,7 +30,7 @@ import AnalyticsDashboard from "./components/Chart/AnalyticsDashboard";
 import CustomerOrderAnalytics from "./components/Chart/CustomerOrderAnalytics";
 import MonthlyRevenueChart from "./components/Chart/MonthlyRevenueChart";
 import Chart from "./components/Charts";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [userId, setUserId] = useState(""); // Add state for storing user role
@@ -81,9 +81,7 @@ function App() {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3006/api/users/${userId}`
-      );
+      const response = await axios.get(`${url}/users/${userId}`);
       setUserData(response.data);
       console.log("user data", userData);
       setLoading(false);

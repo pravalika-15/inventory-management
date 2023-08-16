@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ImportData from "./ImportData";
 import ExportData from "./ExportData";
+const url = "https://inventory-5yt3.onrender.com/api";
 const ProductListing = ({ role, userId }) => {
   // console.log("userId", userId);
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,9 +51,7 @@ const ProductListing = ({ role, userId }) => {
   const fetchCartData = async () => {
     try {
       if (userId) {
-        const response = await axios.get(
-          `http://localhost:3006/api/cart/${userId}`
-        );
+        const response = await axios.get(`${url}/cart/${userId}`);
         setCart(response.data[0].items);
         console.log(response.data[0].items);
         // console.log(response.data.items);
@@ -68,7 +67,7 @@ const ProductListing = ({ role, userId }) => {
   }, [userId]);
   const handleDelete = (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
-      fetch(`http://localhost:3006/api/products/${productId}`, {
+      fetch(`${url}/products/${productId}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -89,7 +88,7 @@ const ProductListing = ({ role, userId }) => {
   };
 
   const handlePagination = (page, search = "") => {
-    fetch(`http://localhost:3006/api/products?page=${page}&search=${search}`)
+    fetch(`${url}/products?page=${page}&search=${search}`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.products);
@@ -156,12 +155,9 @@ const ProductListing = ({ role, userId }) => {
 
         // Update the cart item on the server
         try {
-          await axios.put(
-            `http://localhost:3006/api/cart/items/${existingCartItem._id}`,
-            {
-              quantity: existingCartItem.quantity + 1,
-            }
-          );
+          await axios.put(`${url}/cart/items/${existingCartItem._id}`, {
+            quantity: existingCartItem.quantity + 1,
+          });
           // Update the local cart state
           setCart(updatedCart);
         } catch (error) {
@@ -170,7 +166,7 @@ const ProductListing = ({ role, userId }) => {
       } else {
         // Product doesn't exist in the cart, add it to the cart and save to the server
         try {
-          const response = await axios.post("http://localhost:3006/api/cart", {
+          const response = await axios.post(`${url}/cart`, {
             productId: product._id,
             quantity: 1,
             userId: userId,
@@ -215,7 +211,7 @@ const ProductListing = ({ role, userId }) => {
         setCart(updatedCart);
 
         // Send the updated quantity to the server
-        await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+        await axios.put(`${url}/cart/items/${cartItemId}`, {
           quantity: newQuantity,
         });
       }
@@ -242,14 +238,12 @@ const ProductListing = ({ role, userId }) => {
         setCart(updatedCart);
 
         // // Send the updated quantity to the server to remove the item
-        // await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+        // await axios.put(`${url}/cart/items/${cartItemId}`, {
         //   quantity: newQuantity,
         // });
 
         // Remove the cart item from the server
-        await axios.delete(
-          `http://localhost:3006/api/cart/${userId}/${cartItemId}`
-        );
+        await axios.delete(`${url}/cart/${userId}/${cartItemId}`);
       } else {
         // Update the cart item quantity locally
         const updatedCart = cart.map((item) =>
@@ -258,7 +252,7 @@ const ProductListing = ({ role, userId }) => {
         setCart(updatedCart);
 
         // Send the updated quantity to the server
-        await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+        await axios.put(`${url}/cart/items/${cartItemId}`, {
           quantity: newQuantity,
         });
       }

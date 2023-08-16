@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const EditProduct = () => {
   const { id } = useParams();
   const [productData, setProductData] = useState({
@@ -21,9 +21,7 @@ const EditProduct = () => {
     const fetchProduct = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:3006/api/products/${id}`
-        );
+        const response = await fetch(`${url}/products/${id}`);
         if (response.ok) {
           const product = await response.json();
           setProductData(product);
@@ -48,7 +46,7 @@ const EditProduct = () => {
 
     try {
       setIsLoading(true);
-      const response = await fetch(`http://localhost:3006/api/products/${id}`, {
+      const response = await fetch(`${url}/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

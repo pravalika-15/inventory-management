@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const SupplierEditForm = () => {
   const { id } = useParams();
   const [supplier, setSupplier] = useState(null);
@@ -47,7 +47,7 @@ const SupplierEditForm = () => {
   useEffect(() => {
     // Fetch the existing supplier data from the backend API
     axios
-      .get(` http://localhost:3006/api/suppliers/${id}`)
+      .get(`${url}/suppliers/${id}`)
       .then((response) => {
         setSupplier(response.data);
         setName(response.data.name);
@@ -96,7 +96,7 @@ const SupplierEditForm = () => {
 
     // Send the updated supplier data to the backend API
     axios
-      .put(`http://localhost:3006/api/suppliers/${id}`, updatedSupplier)
+      .put(`${url}/suppliers/${id}`, updatedSupplier)
       .then((response) => {
         console.log("Supplier updated:", response.data);
         navigate("/suppliers");

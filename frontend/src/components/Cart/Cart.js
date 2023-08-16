@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+const url = "https://inventory-5yt3.onrender.com/api";
 const Cart = ({ userId }) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -19,9 +19,7 @@ const Cart = ({ userId }) => {
   const fetchCart = async () => {
     console.log("userId", userId);
     try {
-      const response = await axios.get(
-        `http://localhost:3006/api/cart/${userId}`
-      );
+      const response = await axios.get(`${url}/cart/${userId}`);
       console.log(response);
       const cartItems = response.data[0].items;
       console.log(cartItems);
@@ -34,7 +32,7 @@ const Cart = ({ userId }) => {
 
           // Fetch the product data using the product ID
           const productResponse = await axios.get(
-            `http://localhost:3006/api/products/${productId}`
+            `${url}/products/${productId}`
           );
           const productData = productResponse.data;
 
@@ -58,7 +56,7 @@ const Cart = ({ userId }) => {
 
   const clearCartOnServer = async () => {
     try {
-      await axios.delete(`http://localhost:3006/api/cart/clear/${userId}`);
+      await axios.delete(`${url}/cart/clear/${userId}`);
       console.log("Cart cleared on the server");
     } catch (error) {
       console.error("Error clearing cart on the server:", error);
@@ -68,7 +66,7 @@ const Cart = ({ userId }) => {
   const handleQuantityChange = async (itemId, newQuantity) => {
     try {
       if (newQuantity > 0) {
-        await axios.put(`http://localhost:3006/api/cart/items/${itemId}`, {
+        await axios.put(`${url}/cart/items/${itemId}`, {
           quantity: newQuantity,
         });
         console.log("Cart item quantity updated");
@@ -92,9 +90,7 @@ const Cart = ({ userId }) => {
 
   const handleRemoveItem = async (itemId) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3006/api/cart/${userId}/${itemId}`
-      );
+      const response = await axios.delete(`${url}/cart/${userId}/${itemId}`);
       console.log("Cart item removed");
       console.log(response);
 
@@ -152,17 +148,14 @@ const Cart = ({ userId }) => {
               };
 
               // Create an order on the server
-              const orderResponse = await axios.post(
-                "http://localhost:3006/api/orders",
-                {
-                  userID: userId,
-                  items: cartItems.map((item) => ({
-                    productId: item.productId._id,
-                    quantity: item.quantity,
-                  })),
-                  totalPrice: totalPrice,
-                }
-              );
+              const orderResponse = await axios.post(`${url}/orders`, {
+                userID: userId,
+                items: cartItems.map((item) => ({
+                  productId: item.productId._id,
+                  quantity: item.quantity,
+                })),
+                totalPrice: totalPrice,
+              });
 
               const order = orderResponse.data;
               console.log("order");
@@ -173,7 +166,7 @@ const Cart = ({ userId }) => {
 
               // Save payment details to the server
               const orderPaymentResponse = await axios.post(
-                "http://localhost:3006/api/order-payments",
+                `${url}/order-payments`,
                 paymentDetails
               );
               console.log(orderPaymentResponse);
