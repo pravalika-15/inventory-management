@@ -610,7 +610,7 @@ const OrderList = ({ role, userId, userData }) => {
                         Close
                       </button>
                     </div>
-                    <div className="h-60 overflow-y-auto space-y-4">
+                    <div className="h-10 overflow-y-auto space-y-4">
                       {selectedPaymentDetails.map((payment) => (
                         <div
                           key={payment._id}
@@ -627,7 +627,6 @@ const OrderList = ({ role, userId, userData }) => {
                             Payment Date:{" "}
                             {new Date(payment.paymentDate).toLocaleString()}
                           </p>
-                          {/* Add other payment details as needed */}
                         </div>
                       ))}
                     </div>
