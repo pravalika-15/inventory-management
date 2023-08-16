@@ -146,7 +146,7 @@ function Login({ onLogin }) {
     try {
       const token = localStorage.getItem("token");
       // console.log(JSON.stringify({ username, password }));
-      const response = await fetch(`${url}/api/login`, {
+      const response = await fetch(`${url}/login`, {
         mode: "cors",
         method: "POST",
         headers: {
