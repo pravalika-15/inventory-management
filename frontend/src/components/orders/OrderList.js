@@ -610,7 +610,7 @@ const OrderList = ({ role, userId, userData }) => {
                         Close
                       </button>
                     </div>
-                    <div className="space-y-4">
+                    <div className="h-60 overflow-y-auto space-y-4">
                       {selectedPaymentDetails.map((payment) => (
                         <div
                           key={payment._id}
