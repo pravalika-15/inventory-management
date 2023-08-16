@@ -145,7 +145,7 @@ function Register({ onLogin }) {
                           alt="logo"
                         />
                         <h4 className="mb-12 mt-1 pb-1 text-xl font-semibold">
-                          We are The Lotus Team
+                          We are The Stock Central Team
                         </h4>
                       </div>
                       {error && <p>{error}</p>}
