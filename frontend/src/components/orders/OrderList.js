@@ -319,19 +319,6 @@ const OrderList = ({ role, userId, userData }) => {
       // const razorpayOrderId = "your_razorpay_order_id";
       const currency = "INR"; // Replace with the actual currency
 
-      // Make a POST request to your backend to create a new refund entry in /order-payments
-      const refundResponse = await axios.post(
-        `http://localhost:3006/api/order-payments`,
-        {
-          orderId,
-          paymentId: orderId,
-          amount,
-          currency,
-          status: "Refund initiated",
-        }
-      );
-      console.log(refundResponse.data);
-
       // If the refund entry is successfully created, open the Razorpay payment window for the refund
       const options = {
         key: razorpayKeyId,
@@ -339,7 +326,7 @@ const OrderList = ({ role, userId, userData }) => {
         currency,
         name: "StockCentral",
         description: "Refund for Order #" + orderId,
-        order_id: refundResponse.data.id,
+        // order_id: refundResponse.data.id,
         handler: async function (response) {
           try {
             const updatedOrders = orders.map((order) => {
@@ -350,6 +337,18 @@ const OrderList = ({ role, userId, userData }) => {
             });
             setOrders(updatedOrders);
             console.log("Refund successful!", response);
+            // Make a POST request to your backend to create a new refund entry in /order-payments
+            const refundResponse = await axios.post(
+              `http://localhost:3006/api/order-payments`,
+              {
+                orderId,
+                paymentId: orderId,
+                amount,
+                currency,
+                status: "Refund initiated",
+              }
+            );
+            console.log(refundResponse.data);
 
             // Update the order status to "refund initiated" in the backend
             const updateResponse = await axios.put(

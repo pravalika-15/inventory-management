@@ -162,6 +162,8 @@ const ProductListing = ({ role, userId }) => {
               quantity: existingCartItem.quantity + 1,
             }
           );
+          // Update the local cart state
+          setCart(updatedCart);
         } catch (error) {
           console.error("Error updating cart item quantity:", error);
         }
@@ -176,8 +178,10 @@ const ProductListing = ({ role, userId }) => {
           console.log(response);
           const savedCartItem = response.data;
           setCart((prevCart) => [...prevCart, savedCartItem]);
-          console.log(cart);
+          console.log("cart", cart);
           console.log("added");
+          // Fetch the updated cart data from the server
+          fetchCartData();
           // Show the alert message when a product is added to the cart
           setAlertMessage(`${product.name} added to cart successfully!!`);
           setShowAlert(true);
@@ -206,12 +210,15 @@ const ProductListing = ({ role, userId }) => {
       const updatedCart = cart.map((item) =>
         item._id === cartItemId ? { ...item, quantity: newQuantity } : item
       );
-      setCart(updatedCart);
 
-      // Send the updated quantity to the server
-      await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
-        quantity: newQuantity,
-      });
+      if (newQuantity > 0) {
+        setCart(updatedCart);
+
+        // Send the updated quantity to the server
+        await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+          quantity: newQuantity,
+        });
+      }
     } catch (error) {
       console.error("Error updating cart item quantity:", error);
     }
@@ -233,18 +240,28 @@ const ProductListing = ({ role, userId }) => {
         newQuantity = 0;
         const updatedCart = cart.filter((item) => item._id !== cartItemId);
         setCart(updatedCart);
+
+        // // Send the updated quantity to the server to remove the item
+        // await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+        //   quantity: newQuantity,
+        // });
+
+        // Remove the cart item from the server
+        await axios.delete(
+          `http://localhost:3006/api/cart/${userId}/${cartItemId}`
+        );
       } else {
         // Update the cart item quantity locally
         const updatedCart = cart.map((item) =>
           item._id === cartItemId ? { ...item, quantity: newQuantity } : item
         );
         setCart(updatedCart);
-      }
 
-      // Send the updated quantity to the server
-      await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
-        quantity: newQuantity,
-      });
+        // Send the updated quantity to the server
+        await axios.put(`http://localhost:3006/api/cart/items/${cartItemId}`, {
+          quantity: newQuantity,
+        });
+      }
     } catch (error) {
       console.error("Error updating cart item quantity:", error);
     }
@@ -433,7 +450,10 @@ const ProductListing = ({ role, userId }) => {
             </div>
             {/* Show the alert message */}
             {showAlert && (
-              <div className="fixed top-0 right-0 m-4 bg-gray-300 z-50 text-black p-4 rounded">
+              <div
+                className="fixed top-0 left-25 m-4 bg-gray-300 z-50 text-black p-4 rounded"
+                style={{ left: "50%", transform: "translateX(-50%)" }}
+              >
                 {alertMessage}
               </div>
             )}

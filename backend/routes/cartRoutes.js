@@ -97,16 +97,20 @@ router.get("/cart/:userId", async (req, res) => {
   }
 });
 
-router.delete("/cart/:itemId", async (req, res) => {
+router.delete("/cart/:userId/:itemId", async (req, res) => {
   try {
+    const userId = req.params.userId;
     const itemId = req.params.itemId;
 
-    // Delete the cart item from the cart collection
+    console.log("Deleting item. User ID:", userId, "Item ID:", itemId);
+
     const cart = await Cart.findOneAndUpdate(
-      {},
+      { userId: userId },
       { $pull: { items: { _id: itemId } } },
       { new: true }
     );
+
+    console.log("Updated Cart:", cart);
 
     if (cart) {
       return res.json({ message: "Item removed from cart" });

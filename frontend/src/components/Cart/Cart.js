@@ -93,7 +93,7 @@ const Cart = ({ userId }) => {
   const handleRemoveItem = async (itemId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3006/api/cart/${itemId}`
+        `http://localhost:3006/api/cart/${userId}/${itemId}`
       );
       console.log("Cart item removed");
       console.log(response);
@@ -223,7 +223,7 @@ const Cart = ({ userId }) => {
                           {item.product.name}
                         </h3>
                         <p className="text-gray-600">
-                          Price: ${item.product.price}
+                          Price: ₹{item.product.price}
                         </p>
                         <div className="flex items-center mt-2">
                           <button

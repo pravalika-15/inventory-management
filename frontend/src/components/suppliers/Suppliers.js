@@ -16,6 +16,7 @@ const SupplierTable = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [payAndDeleteConfirmed, setPayAndDeleteConfirmed] = useState(false);
   const [supplierToDeleteId, setSupplierToDeleteId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (searchQuery === "") {
@@ -149,7 +150,7 @@ const SupplierTable = () => {
               currency: "INR",
             }
           );
-          // console.log(response);
+          console.log(response);
           const order = response.data;
           console.log("order", order);
           console.log("Payment success:", response);
@@ -167,7 +168,7 @@ const SupplierTable = () => {
           setSuppliers(updatedSuppliers);
 
           axios
-            .put(`http://localhost:3006/api/suppliers/${supplierId}`, {
+            .put(`http://localhost:3006/api/suppliers/${supplierId}/payment`, {
               amount: 0,
               paymentStatus: "Payment Done",
             })

@@ -26,6 +26,8 @@ const SupplierCreateForm = () => {
 
     if (phoneNumber.trim() === "") {
       errors.phoneNumber = "Phone Number is required";
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      errors.phoneNumber = "Phone Number must be 10 digits";
     }
     if (amount.trim() === "") {
       errors.amount = "amount is required";

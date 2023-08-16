@@ -217,12 +217,36 @@ router.get("/suppliers/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve the supplier" });
   }
 });
+router.put("/suppliers/:id/payment", async (req, res) => {
+  try {
+    const supplierId = req.params.id;
+    const { amount, paymentStatus } = req.body;
+    // Determine the payment status based on the amount
+    // const paymentStatus = amount === 0 ? "Payment Done" : "Payment Pending";
+
+    const updatedSupplier = await Supplier.findByIdAndUpdate(
+      supplierId,
+      { amount, paymentStatus },
+      { new: true }
+    );
+
+    if (updatedSupplier) {
+      res.json(updatedSupplier);
+    } else {
+      res.status(404).json({ error: "Supplier not found" });
+    }
+  } catch (error) {
+    console.error("Error updating supplier payment:", error);
+    res.status(500).json({ error: "Failed to update supplier payment" });
+  }
+});
 
 // Route for updating a supplier
-// Update a supplier
+
 router.put("/suppliers/:id", async (req, res) => {
   try {
     const supplierId = req.params.id;
+    console.log(req.body);
     const { name, contactName, phoneNumber, email, address, amount } = req.body;
 
     // Determine the payment status based on the amount
