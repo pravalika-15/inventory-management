@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,6 +37,22 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetchingUserData, setFetchingUserData] = useState(true);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   useEffect(() => {
     // Check if the user is authenticated by verifying the token in sessionStorage
@@ -122,8 +138,10 @@ function App() {
               authenticated={authenticated}
               onLogout={handleLogout}
               userData={userData}
+              isMenuOpen={isMenuOpen}
+              setMenuOpen={setMenuOpen}
             />
-            <div style={{ paddingTop: "64px" }}></div>
+            <div style={{ paddingTop: "4rem" }}></div>
             <Routes>
               <Route
                 path="/"

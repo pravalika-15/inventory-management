@@ -387,9 +387,17 @@ const OrderList = ({ role, userId, userData }) => {
           <div className="flex items-center justify-center h-screen">
             <div className="text-4xl text-gray-600">Loading...</div>
           </div>
+        ) : orders.length === 0 ? (
+          <div className="flex items-center justify-center h-screen">
+            <p className="text-2xl text-gray-600">
+              {role === "user"
+                ? `No orders found for ${name}`
+                : "No orders found"}
+            </p>
+          </div>
         ) : (
           <>
-            <div className="search mt-8 mb-8 flex items-center">
+            <div className="search mt-8 mb-8 flex items-center px-5">
               <input
                 type="text"
                 id="search-input"
@@ -414,7 +422,7 @@ const OrderList = ({ role, userId, userData }) => {
                 Search
               </button> */}
             </div>
-            <div>
+            <div className="px-5">
               {role === "user" && (
                 <div>
                   <h2 className="text-2xl font-bold mb-4 px-3 py-5 text-center">

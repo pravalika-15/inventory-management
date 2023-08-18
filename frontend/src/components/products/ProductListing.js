@@ -263,7 +263,7 @@ const ProductListing = ({ role, userId }) => {
 
   return (
     <>
-      <div className="container mx-auto py-4">
+      <div className="container mx-auto py-4 px-5">
         {loading ? (
           <div className="flex items-center justify-center h-screen">
             <div className="text-4xl text-gray-600">Loading...</div>

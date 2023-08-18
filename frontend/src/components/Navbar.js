@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa"; // Import the cart icon
 const url = "https://inventory-5yt3.onrender.com/api";
-const NavBar = ({ authenticated, onLogout, userData }) => {
-  const [isMenuOpen, setMenuOpen] = useState(false);
+const NavBar = ({
+  authenticated,
+  onLogout,
+  userData,
+  isMenuOpen,
+  setMenuOpen,
+}) => {
+  // const [isMenuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const isLoggedIn = authenticated;
   const navigate = useNavigate();
@@ -21,6 +28,19 @@ const NavBar = ({ authenticated, onLogout, userData }) => {
     onLogout();
     navigate("/");
   };
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   const role = userData ? userData.role : "user";
 
@@ -95,6 +115,7 @@ const NavBar = ({ authenticated, onLogout, userData }) => {
             )}
             <button
               type="button"
+              ref={menuRef}
               className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-sticky"
               aria-expanded={isMenuOpen}
