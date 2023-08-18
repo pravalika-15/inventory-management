@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import "../../assets/css/customModal.css";
 import OrderAnalyticsModal from "../Chart/OrderAnalyticsModal";
 const url = "https://inventory-5yt3.onrender.com/api";
+
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -185,7 +187,7 @@ const Users = () => {
         </div>
       ) : (
         <>
-          <div className="search mt-8 mb-8 flex items-center p-10">
+          <div className="search mt-8 mb-8 flex items-center p-5">
             <input
               type="text"
               id="search-input"
@@ -202,7 +204,7 @@ const Users = () => {
               Search
             </button>
           </div>
-          <div className="container mx-auto py-8">
+          <div className="container mx-auto py-8 px-5">
             <h2 className="text-2xl font-bold mb-4">Users</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {users.map((user) => (
@@ -235,7 +237,7 @@ const Users = () => {
                 </div>
               ))}
             </div>
-            <div className="pagination flex items-center justify-center mt-8">
+            <div className="pagination flex items-center justify-center mt-8 px-5">
               <button
                 id="prevPageBtn"
                 onClick={handlePrevPage}
@@ -262,7 +264,7 @@ const Users = () => {
 
             {selectedUser && (
               <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-500 bg-opacity-50">
-                <div className="bg-white p-8 rounded shadow-md w-1/2">
+                <div className="bg-white rounded-lg p-4 mx-4 md:mx-auto shadow-lg custom-modal">
                   <h3 className="text-xl font-bold mb-2">Update User</h3>
                   {errorMessage && (
                     <p className="text-red-500 text-sm mt-1">{errorMessage}</p>

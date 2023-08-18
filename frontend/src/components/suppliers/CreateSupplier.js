@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../../assets/css/supplier.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 const url = "https://inventory-5yt3.onrender.com/api";
 
 const SupplierCreateForm = () => {
@@ -127,12 +127,13 @@ const SupplierCreateForm = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center px-5">
       <div className="w-full max-w-lg">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-5 pb-8 mb-4"
           onSubmit={handleSubmit}
         >
+          <h2 className="text-2xl font-bold mb-4">Create Supplier</h2>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -260,6 +261,12 @@ const SupplierCreateForm = () => {
             >
               Create Supplier
             </button>
+            <Link
+              to="/suppliers"
+              className=" hover:text-gray-800 text-gray-400 font-bold py-2 px-4 rounded"
+            >
+              Cancel
+            </Link>
           </div>
         </form>
       </div>

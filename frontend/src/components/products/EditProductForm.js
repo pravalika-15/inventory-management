@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 const url = "https://inventory-5yt3.onrender.com/api";
 const EditProduct = () => {
   const { id } = useParams();
@@ -85,7 +85,7 @@ const EditProduct = () => {
   // }
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto mt-8 px-5">
       <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
       {formError && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <form onSubmit={handleSubmit}>
@@ -160,12 +160,20 @@ const EditProduct = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Update
-        </button>
+        <div className="mt-4">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Update
+          </button>
+          <Link
+            to="/products"
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

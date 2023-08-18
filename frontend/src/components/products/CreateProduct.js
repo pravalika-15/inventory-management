@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 const url = "https://inventory-5yt3.onrender.com/api";
 const CreateProduct = () => {
   const [name, setName] = useState("");
@@ -50,7 +50,7 @@ const CreateProduct = () => {
     }
   };
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto mt-8 px-5">
       <h2 className="text-2xl font-bold mb-4">Create Product</h2>
       {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <form onSubmit={handleSubmit}>
@@ -137,12 +137,27 @@ const CreateProduct = () => {
             required
           />
         </div>
-        <button
+        {/* <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Create
-        </button>
+        </button> */}
+
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Create Product
+          </button>
+          <Link
+            to="/products"
+            className=" hover:text-gray-800 text-gray-400 font-bold py-2 px-4 rounded"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

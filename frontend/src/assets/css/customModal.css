@@ -1,0 +1,17 @@
+.custom-modal {
+  width: 80%;
+}
+
+/* Adjust modal width for larger screens */
+@media (min-width: 768px) {
+  .custom-modal {
+    width: 60%;
+  }
+}
+
+/* Adjust modal width for even larger screens */
+@media (min-width: 1024px) {
+  .custom-modal {
+    width: 50%;
+  }
+}
