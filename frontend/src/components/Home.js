@@ -46,7 +46,7 @@ const Home = ({ onLogout, userId }) => {
           )}
         </header>
       </div>
-      <div className="lg:w-1/2 bg-gray-400 h-60 lg:h-screen h-3/4">
+      <div className="lg:w-1/2 bg-gray-400 lg:h-screen h-3/4">
         <img
           src={heroImage}
           className="h-full w-full object-cover"
