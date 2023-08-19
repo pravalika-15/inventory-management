@@ -207,7 +207,7 @@ const Cart = ({ userId }) => {
             {cartItems.length === 0 ? (
               <p>Your cart is empty</p>
             ) : (
-              <div>
+              <div className="mr-5 ml-3">
                 <ul className="divide-y divide-gray-300">
                   {cartItems.map((item) => (
                     <li key={item._id} className="py-4 flex items-center">

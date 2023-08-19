@@ -387,15 +387,16 @@ const OrderList = ({ role, userId, userData }) => {
           <div className="flex items-center justify-center h-screen">
             <div className="text-4xl text-gray-600">Loading...</div>
           </div>
-        ) : orders.length === 0 ? (
-          <div className="flex items-center justify-center h-screen">
-            <p className="text-2xl text-gray-600">
-              {role === "user"
-                ? `No orders found for ${name}`
-                : "No orders found"}
-            </p>
-          </div>
         ) : (
+          // ) : orders.length === 0 ? (
+          //   <div className="flex items-center justify-center h-screen">
+          //     <p className="text-2xl text-gray-600">
+          //       {role === "user"
+          //         ? `No orders found for ${name}`
+          //         : "No orders found"}
+          //     </p>
+          //   </div>
+          // ) :
           <>
             <div className="search mt-8 mb-8 flex items-center px-5">
               <input
@@ -606,17 +607,17 @@ const OrderList = ({ role, userId, userData }) => {
               )}
               {showPaymentCard && (
                 <div className="fixed inset-0 flex items-center justify-center z-50">
-                  <div className="bg-white rounded-lg p-8 mx-auto w-96 shadow-lg">
+                  <div className="bg-white rounded-lg p-4 mx-auto w-full sm:w-96 shadow-lg">
                     <div className="flex justify-between mb-4">
                       <h2 className="text-2xl font-bold text-blue-600">
                         Payment Details for Order {selectedOrderId}
                       </h2>
-                      <button
-                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                      {/* <button
+                        className="text-blue-600 hover:text-blue-800 font-semibold"
                         onClick={handleClosePaymentCard}
                       >
                         Close
-                      </button>
+                      </button> */}
                     </div>
                     <div className="h-60 overflow-y-auto space-y-4">
                       {selectedPaymentDetails.map((payment) => (
@@ -638,34 +639,48 @@ const OrderList = ({ role, userId, userData }) => {
                         </div>
                       ))}
                     </div>
+                    <div className="mt-4 text-center">
+                      <button
+                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                        onClick={handleClosePaymentCard}
+                      >
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-            <div className="pagination flex items-center justify-center mt-8">
-              <button
-                id="prevPageBtn"
-                onClick={handlePrevPage}
-                disabled={currentPage === 1}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <span id="currentPage" className="text-gray-600 font-bold mx-2">
-                {currentPage}
-              </span>
-              <span id="totalPages" className="text-gray-500">
-                of {totalPages}
-              </span>
-              <button
-                id="nextPageBtn"
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
+            {orders.length !== 0 && (
+              <div className="pagination flex items-center justify-center mt-8">
+                <button
+                  id="prevPageBtn"
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                <span id="currentPage" className="text-gray-600 font-bold mx-2">
+                  {currentPage}
+                </span>
+                <span id="totalPages" className="text-gray-500">
+                  of {totalPages}
+                </span>
+                <button
+                  id="nextPageBtn"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ml-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            )}
+
+            {orders.length === 0 && (
+              <div className="container p-5">No orders Listed!</div>
+            )}
           </>
         )}
       </div>
