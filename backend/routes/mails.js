@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const getSupplierEmails = async (items) => {
   try {
+    console.log(items);
     const productIds = items.map((item) => item.product);
     const products = await Product.find({ _id: { $in: productIds } });
     const supplierIds = products.map((product) => product.supplier);

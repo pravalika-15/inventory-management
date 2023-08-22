@@ -298,8 +298,7 @@ router.delete("/users/:id", async (req, res) => {
       from: company_mail, // Replace with your email address
       to: user.email, // Use the user's email address
       subject: "Account Deletion Notification",
-      text: `Dear ${user.username},\n\nWe are sorry to inform you that your account has been deleted. We apologize for any inconvenience this may have caused. If you have any questions or concerns, please feel free to contact us.\n\nBest regards,\nRegards,
-      The StockCentral Team`,
+      text: `Dear ${user.username},\n\nWe are sorry to inform you that your account has been deleted. We apologize for any inconvenience this may have caused. If you have any questions or concerns, please feel free to contact us.\n\nBest regards,\nRegards, The StockCentral Team`,
     };
 
     transporter.sendMail(emailOptions, (error, info) => {

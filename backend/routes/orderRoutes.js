@@ -74,6 +74,7 @@ const sendEmail = async (order) => {
     const { name: userName, email: userEmail } = await getUserNameAndEmail(
       order.userID
     );
+    console.log("dfghjkl", await getUserNameAndEmail(order.userID));
 
     // Fetch supplier emails
     const supplierEmails = await getSupplierEmails(order.items);
