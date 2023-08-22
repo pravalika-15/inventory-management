@@ -31,6 +31,7 @@ const transporter = nodemailer.createTransport({
 const getProductName = async (productID) => {
   try {
     const product = await Product.findById(productID);
+    console.log(product);
     return product ? product.name : "Unknown product";
   } catch (error) {
     console.error("Error fetching product:", error);
