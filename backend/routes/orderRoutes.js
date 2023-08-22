@@ -43,7 +43,7 @@ const getUserNameAndEmail = async (userID) => {
     const user = await User.findById(userID);
     console.log("user", user);
     if (user) {
-      return { name: user.name, email: user.email };
+      return { name: user.username, email: user.email };
     } else {
       return { name: "Unknown User", email: "unknown@example.com" };
     }
