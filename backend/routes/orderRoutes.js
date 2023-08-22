@@ -74,7 +74,7 @@ const getSupplierEmails = async (items) => {
 
 // Define a function to send email based on order details
 const sendEmail = async (order) => {
-  // console.log("order", order);
+  console.log("order", order);
   try {
     // Fetch user name
     const { name: userName, email: userEmail } = await getUserNameAndEmail(
