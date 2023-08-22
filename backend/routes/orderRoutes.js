@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
 const getProductName = async (productID) => {
   try {
     const product = await Product.findById(productID);
-    console.log(product);
+    console.log("product", product);
     return product ? product.name : "Unknown product";
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -91,7 +91,9 @@ Customer: ${userName}
 Supplier Emails: ${supplierEmails.join(", ")}
 Items:
 ${order.items
-  .map((item) => `${getProductName(item.product)} x ${item.quantity}`)
+  .map(
+    async (item) => `${await getProductName(item.product)} x ${item.quantity}`
+  )
   .join("\n")}
 Total Price: ${order.totalPrice}
 Thank you for using our service. For more information, please visit our website: https://your_website.com.
