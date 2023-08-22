@@ -41,7 +41,7 @@ const getProductName = async (productID) => {
 const getUserNameAndEmail = async (userID) => {
   try {
     const user = await User.findById(userID);
-    console.log("user", user);
+    // console.log("user", user);
     if (user) {
       return { name: user.username, email: user.email };
     } else {
@@ -69,13 +69,12 @@ const getSupplierEmails = async (items) => {
 
 // Define a function to send email based on order details
 const sendEmail = async (order) => {
-  console.log("order", order);
+  // console.log("order", order);
   try {
     // Fetch user name
     const { name: userName, email: userEmail } = await getUserNameAndEmail(
       order.userID
     );
-    console.log("dfghjkl", await getUserNameAndEmail(order.userID));
 
     // Fetch supplier emails
     const supplierEmails = await getSupplierEmails(order.items);
@@ -91,7 +90,7 @@ Customer: ${userName}
 Supplier Emails: ${supplierEmails.join(", ")}
 Items:
 ${order.items
-  .map((item) => `${getProductName(item._id)} x ${item.quantity}`)
+  .map((item) => `${getProductName(item.product)} x ${item.quantity}`)
   .join("\n")}
 Total Price: ${order.totalPrice}
 Thank you for using our service. For more information, please visit our website: https://your_website.com.
