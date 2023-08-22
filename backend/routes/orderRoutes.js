@@ -41,6 +41,7 @@ const getProductName = async (productID) => {
 const getUserNameAndEmail = async (userID) => {
   try {
     const user = await User.findById(userID);
+    console.log("user", user);
     if (user) {
       return { name: user.name, email: user.email };
     } else {
