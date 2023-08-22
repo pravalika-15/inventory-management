@@ -31,8 +31,12 @@ const transporter = nodemailer.createTransport({
 const getProductName = async (productID) => {
   try {
     const product = await Product.findById(productID);
-    console.log("product", product);
-    return product ? product.name : "Unknown product";
+    console.log("product", product.name);
+    if (product) {
+      return product.name;
+    } else {
+      return "Unknown product";
+    }
   } catch (error) {
     console.error("Error fetching product:", error);
     throw new Error("Failed to fetch product name");
@@ -90,13 +94,14 @@ Order ID: ${order._id}
 Customer: ${userName}
 Supplier Emails: ${supplierEmails.join(", ")}
 Items:
-${order.items
-  .map(
-    async (item) => `${await getProductName(item.product)} x ${item.quantity}`
-  )
-  .join("\n")}
+${await Promise.all(
+  order.items.map(async (item) => {
+    const productName = await getProductName(item.product);
+    return `${productName} x ${item.quantity}`;
+  })
+).join("\n")}
 Total Price: ${order.totalPrice}
-Thank you for using our service. For more information, please visit our website: https://your_website.com.
+Thank you for using our service. For more information, please visit our website: https://sensational-muffin-3ff308.netlify.app.
     `;
 
     const recipients = [userEmail, ...supplierEmails, admin_mail].join(", ");
