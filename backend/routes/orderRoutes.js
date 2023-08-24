@@ -97,6 +97,7 @@ Items:
 ${await Promise.all(
   order.items.map(async (item) => {
     const productName = await getProductName(item.product);
+    console.log("productName", productName);
     return `${productName} x ${item.quantity}`;
   })
 ).join("\n")}
