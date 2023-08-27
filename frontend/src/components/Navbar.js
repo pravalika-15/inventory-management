@@ -56,9 +56,9 @@ const NavBar = ({
             <img
               src="https://cdn-icons-png.flaticon.com/128/3649/3649531.png"
               className="h-8 mr-3"
-              alt="Flowbite Logo"
+              alt="stockCentral Logo"
             />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white hidden md:inline">
+            <span className="self-center text-xl text-black-100 font-semibold whitespace-nowrap dark:text-white hidden md:inline">
               StockCentral
             </span>
           </a>
