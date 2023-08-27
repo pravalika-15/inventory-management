@@ -54,7 +54,7 @@ const NavBar = ({
             className="flex items-center"
           >
             <img
-              src="https://flowbite.com/docs/images/logo.svg"
+              src="https://cdn-icons-png.flaticon.com/128/3649/3649531.png"
               className="h-8 mr-3"
               alt="Flowbite Logo"
             />
